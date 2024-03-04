@@ -22,26 +22,43 @@ class MainActivity : AppCompatActivity() {
         {
              numberOne = binding.noteOne.text.toString().toFloatOrNull()
              numberTwo = binding.noteTwo.text.toString().toFloatOrNull()
-            if (numberOne != null && numberTwo != null)
+               if (numberOne != null && numberTwo != null)
             {
                 if (numberOne!! >= 0 && numberOne!!<=100  && numberTwo!! >= 0 && numberTwo!! <=100)
                 {
                      totalPoint = (numberOne!! + numberTwo!!) /2
-                    when {
-                        totalPoint < 25 -> sendToastMessage("You Didn't Pass the Course")
-                        totalPoint < 50 -> sendToastMessage("You barely passed the lesson")
-                        totalPoint < 75 -> sendToastMessage("You passed the lesson but you can get better.")
-                        else -> sendToastMessage("You have successfully passed the lesson.")
+                    if (totalPoint<50)
+                    {
+                        sendToastMessage("You Didn't Pass the Course")
+                        sendToastMessageColor(R.color.myRed)
+
+                    }
+                    else if (totalPoint>=50 && totalPoint<75)
+                    {
+                        sendToastMessage("You barely passed the lesson")
+                        sendToastMessageColor(R.color.myOrange)
+                    }
+                    else if (totalPoint>=75 && totalPoint<90)
+                    {
+                        sendToastMessage("You passed the lesson but you can get better.")
+                        sendToastMessageColor(R.color.myBlue)
+                    }
+                    else if (totalPoint>=90)
+                    {
+                        sendToastMessage("You have successfully passed the lesson.")
+                        sendToastMessageColor(R.color.myGreen)
                     }
                 }
                 else
                 {
+                    sendToastMessageColor(R.color.myRed)
                     binding.studentStatusText.text = "Enter valid values between 0 and 100"
                 }
             }
             else
             {
-                sendToastMessage("Fill in the blanks.")
+                sendToastMessageColor(R.color.myRed)
+                binding.studentStatusText.text ="Fill in the blanks."
             }
         }
         binding.noteOne.setOnFocusChangeListener { _, hasFocus ->
@@ -59,5 +76,8 @@ class MainActivity : AppCompatActivity() {
     private fun sendToastMessage(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         binding.studentStatusText.text = message + " Your Point ${totalPoint}"
+    }
+      private fun sendToastMessageColor(colorResId: Int) {
+        binding.studentStatusText.setTextColor(getColor(colorResId))
     }
 }
